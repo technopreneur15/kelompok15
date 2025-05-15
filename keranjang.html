@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Keranjang Belanja</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('img/background3.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    header {
+      background-color: gold;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      opacity: 90%;
+    }
+
+    .logo_kampus {
+      box-shadow: 0 0 5px black;
+      position: absolute;
+      top: 2%;
+      left: 5px;
+      height: 70px;
+      width: 70px;
+      border-radius: 100%;
+    }
+
+    h1 {
+      color:white;
+      text-shadow: 0 0 5px black;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      text-shadow: 0 0 5px black;
+      font-weight: bolder;
+      transition-duration: 200ms;
+    }
+
+    nav a:hover {
+      color: white;;
+      font-size: larger;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: white;
+      border-radius: 10px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 3px solid gray;
+      text-align: center;
+    }
+
+    .total {
+      font-weight: bold;
+      color: rgb(0, 0, 0);
+    }
+
+    .checkout-btn {
+      background-color: chartreuse;
+      font-weight: bold;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      transition-duration: 100ms;
+      text-shadow: 0 0 4px black;
+    }
+
+    .checkout-btn:hover {
+      background-color: lightgreen;
+      transform: scale(1.05);
+    }
+
+    button {
+      margin: 0 2px;
+      padding: 4px 8px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+ <header>
+  <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+    <img src="img/logo.png" alt="Logo Kelompok 15" class="logo_kampus">
+    <div>
+      <h1>KERANJANG BELANJA</h1>
+    </div>
+  </div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="produk.html">Produk</a>
+    <a href="keranjang.html" style="color: yellow; text-shadow: 0 0 5px rgb(0, 0, 0); font-size: larger">Keranjang</a>
+    <a href="checkout.html">Checkout</a>
+  </nav>
+</header>
+
+  <main>
+    <div id="keranjangContainer"></div>
+  </main>
+
+  <script>
+    const produk = {
+      1: { nama: 'Rumpu Rampe', harga: 10000 },
+      2: { nama: 'Es Madu', harga: 5000 },
+      3: { nama: 'Jamu Bubuk', harga: 10000 }
+    };
+
+    function renderKeranjang() {
+      const keranjang = JSON.parse(localStorage.getItem('keranjang')) || {};
+      const container = document.getElementById('keranjangContainer');
+      container.innerHTML = '';
+
+      if (Object.keys(keranjang).length === 0) {
+        container.innerHTML = '<p>Keranjang Anda kosong.</p>';
+        return;
+      }
+
+      let table = `<table>
+        <tr>
+          <th>Nama Produk</th>
+          <th>Harga</th>
+          <th>Jumlah</th>
+          <th>Subtotal</th>
+          <th>Aksi</th>
+        </tr>`;
+
+      let total = 0;
+      for (const id in keranjang) {
+        const jumlah = keranjang[id];
+        const item = produk[id];
+        const subtotal = item.harga * jumlah;
+        total += subtotal;
+
+        table += `
+          <tr>
+            <td>${item.nama}</td>
+            <td>Rp ${item.harga.toLocaleString('id-ID')}</td>
+            <td>${jumlah}</td>
+            <td>Rp ${subtotal.toLocaleString('id-ID')}</td>
+            <td>
+              <button onclick="ubahJumlah(${id}, 'tambah')">+</button>
+              <button onclick="ubahJumlah(${id}, 'kurang')">–</button>
+              <button onclick="hapusItem(${id})">Hapus</button>
+            </td>
+          </tr>`;
+      }
+
+      table += `
+        <tr>
+          <td colspan="3" class="total">Total</td>
+          <td class="total" colspan="2">Rp ${total.toLocaleString('id-ID')}</td>
+        </tr>
+      </table>
+      <a href="checkout.html" class="checkout-btn">Checkout</a>`;
+
+      container.innerHTML = table;
+    }
+
+    function ubahJumlah(id, aksi) {
+      const keranjang = JSON.parse(localStorage.getItem('keranjang')) || {};
+      if (aksi === 'tambah') {
+        keranjang[id]++;
+      } else if (aksi === 'kurang') {
+        keranjang[id]--;
+        if (keranjang[id] < 1) {
+          delete keranjang[id];
+        }
+      }
+      localStorage.setItem('keranjang', JSON.stringify(keranjang));
+      renderKeranjang();
+    }
+
+    function hapusItem(id) {
+      if (confirm('Hapus item ini?')) {
+        const keranjang = JSON.parse(localStorage.getItem('keranjang')) || {};
+        delete keranjang[id];
+        localStorage.setItem('keranjang', JSON.stringify(keranjang));
+        renderKeranjang();
+      }
+    }
+
+    // Render saat halaman dimuat
+    renderKeranjang();
+  </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>KELOMPOK 15</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <style>
+    /* CSS tetap sama seperti file sebelumnya */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('img/background3.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    header {
+      background-color: gold;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      opacity: 90%;
+    }
+
+    .logo_kampus {
+      box-shadow: 0 0 5px black;
+      position: absolute;
+      top: 2%;
+      left: 5px;
+      height: 70px;
+      width: 70px;
+      border-radius: 100%;
+    }
+
+    h1 {
+      color:white;
+      text-shadow: 0 0 5px black;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      text-shadow: 0 0 5px black;
+      font-weight: bolder;
+      transition-duration: 200ms;
+    }
+    nav a:hover {
+      color: white;;
+      font-size: larger;
+    }
+    main {
+      padding: 20px;
+    }
+    .produk-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .produk {
+      border: 3px solid #ddd;
+      overflow: hidden;
+      text-align: center;
+      padding: 10px;
+      background-color: gold;
+      box-shadow: 0 0 5px black;
+    }
+    .produk:hover {
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .produk img {
+      width: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .info {
+      margin-top: 10px;
+    }
+    .info h3 {
+      margin: 5px 0;
+      color: white;
+      text-shadow: 0 0 5px black;
+    }
+    .info p {
+      margin: 5px 0;
+      color: white;
+      text-shadow: 0 0 5px black;
+    }
+    .info button {
+      background-color:cornflowerblue;
+      color: white;
+      font-weight: bold;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 0 5px black;
+    }
+    .info button:hover {
+      background-color:rgb(20, 19, 63);
+    }
+    #popup {
+      position: fixed;
+      top: 20px;
+      right: 25%;
+      background-color:rgb(24, 48, 46);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      z-index: 1000;
+      font-weight: bold;
+      animation: fadeOut 0.5s ease-in-out 2.5s forwards;
+    }
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+  <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+    <img src="img/logo.png" alt="Logo Kelompok 15" class="logo_kampus">
+    <div>
+      <h1>DAFTAR PRODUK</h1>
+    </div>
+  </div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="produk.html" style="color: yellow; text-shadow: 0 0 5px rgb(0, 0, 0); font-size: larger">Produk</a>
+    <a href="keranjang.html">Keranjang</a>
+    <a href="checkout.html">Checkout</a>
+  </nav>
+</header>
+
+  <main>
+    <div class="produk-container" id="produkContainer"></div>
+  </main>
+
+  <script>
+    const produk = [
+      { id: 1, nama: 'Rumpu-Rampe', harga: 10000, gambar: 'img/rumpu-rampe.jpeg' },
+      { id: 2, nama: 'Es-Madu', harga: 5000, gambar: 'img/Es (3).jpeg' },
+      { id: 3, nama: 'Jamu Bubuk', harga: 10000, gambar: 'img/jamu.jpeg' }
+    ];
+
+    const container = document.getElementById('produkContainer');
+
+    function tampilkanPopup(pesan) {
+      const popup = document.createElement('div');
+      popup.id = 'popup';
+      popup.textContent = pesan;
+      document.body.appendChild(popup);
+      setTimeout(() => popup.remove(), 3000);
+    }
+
+    function tambahKeKeranjang(id) {
+      const keranjang = JSON.parse(localStorage.getItem('keranjang')) || {};
+      keranjang[id] = (keranjang[id] || 0) + 1;
+      localStorage.setItem('keranjang', JSON.stringify(keranjang));
+
+      const produkDipilih = produk.find(p => p.id === id);
+      tampilkanPopup(`${produkDipilih.nama.toUpperCase()} BERHASIL DITAMBAHKAN DI KERANJANG`);
+    }
+
+    // Render produk
+    produk.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'produk';
+      card.innerHTML = `
+        <img src="${p.gambar}" alt="${p.nama}">
+        <div class="info">
+          <h3>${p.nama}</h3>
+          <p>Rp ${p.harga.toLocaleString('id-ID')}</p>
+          <button onclick="tambahKeKeranjang(${p.id})">Tambah ke Keranjang</button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <style>
+    /* CSS yang sama seperti file PHP, tidak diubah */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('img/background3.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    header {
+      background-color: gold;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      opacity: 90%;
+    }
+
+    .logo_kampus {
+      box-shadow: 0 0 5px black;
+      position: absolute;
+      top: 2%;
+      left: 5px;
+      height: 70px;
+      width: 70px;
+      border-radius: 100%;
+    }
+
+    h1 {
+      color:white;
+      text-shadow: 0 0 5px black;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      text-shadow: 0 0 5px black;
+      font-weight: bolder;
+      transition-duration: 200ms;
+    }
+    nav a:hover {
+      color: white;
+      font-size: larger;
+      transition-duration: 200ms;
+    }
+    main {
+      padding: 20px;
+      text-align: center;
+    }
+    .popup {
+      background-color: gold;
+      box-shadow: 0 0 5px black;
+      border-radius: 10px;
+      display: inline-block;
+      padding: 20px;
+      margin-top: 20px;
+      color: #333;
+    }
+    .popup strong {
+      color: #28a745;
+    }
+    form input, form textarea {
+      width: 80%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 2px solid darkslategray;
+      background-color: rgba(255, 255, 255, 0.7);
+    }
+    form button {
+      padding: 10px 20px;
+      background-color:chartreuse;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+      text-shadow: 0 0 4px black;
+      font-weight: bold;
+      transition-duration: 100ms;
+    }
+    form button:hover {
+      background-color:lightgreen;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+ <header>
+  <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+    <img src="img/logo.png" alt="Logo Kelompok 15" class="logo_kampus">
+    <div>
+      <h1>CHECKOUT</h1>
+    </div>
+  </div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="produk.html">Produk</a>
+    <a href="keranjang.html">Keranjang</a>
+    <a href="checkout.html" style="color: yellow; text-shadow: 0 0 5px rgb(0, 0, 0); font-size: larger">Checkout</a>
+  </nav>
+</header>
+
+  <main>
+    <div class="popup" id="checkoutBox">
+      <p id="checkoutInfo">Memuat...</p>
+      <form id="checkoutForm">
+        <input type="text" name="nama" placeholder="Masukkan Nama" required>
+        <input type="text" name="hp" placeholder="Masukkan Nomor HP" required>
+        <textarea name="alamat" placeholder="Masukkan Alamat" required></textarea>
+        <button type="submit">Bayar (COD) dan Kirim ke WhatsApp</button>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    const produk = {
+      1: { nama: 'Rumpu-Rampe', harga: 10000 },
+      2: { nama: 'Es Madu', harga: 5000 },
+      3: { nama: 'Jamu Bubuk', harga: 10000 }
+    };
+
+    const keranjang = JSON.parse(localStorage.getItem('keranjang')) || {};
+    const checkoutInfo = document.getElementById('checkoutInfo');
+    const form = document.getElementById('checkoutForm');
+
+    let total = 0;
+    let pesanList = [];
+
+    for (const id in keranjang) {
+      const jumlah = keranjang[id];
+      const item = produk[id];
+      if (item) {
+        const subtotal = item.harga * jumlah;
+        total += subtotal;
+        pesanList.push(`${item.nama} x${jumlah} (Rp ${subtotal.toLocaleString('id-ID')})`);
+      }
+    }
+
+    if (total === 0) {
+      checkoutInfo.innerHTML = `<strong style="color: white; text-shadow: 0 0 5px black;">Tidak ada item dalam keranjang.</strong>`;
+      form.style.display = 'none';
+    } else {
+      checkoutInfo.innerHTML = `Total Pembayaran Anda: <strong style="color:chartreuse; text-shadow: 0 0 4px black;">Rp ${total.toLocaleString('id-ID')}</strong>`;
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const nama = form.nama.value.trim();
+      const hp = form.hp.value.trim();
+      const alamat = form.alamat.value.trim();
+      
+      const pesan = `Nama: ${nama}\nNomor HP: ${hp}\nAlamat: ${alamat}\nPesanan:\n${pesanList.join('\n')}\nTotal: Rp ${total.toLocaleString('id-ID')}`;
+      const url = `https://wa.me/6282341372421?text=${encodeURIComponent(pesan)}`;
+
+      // Kosongkan keranjang setelah checkout
+      localStorage.removeItem('keranjang');
+
+      window.location.href = url;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>KELOMPOK 15</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('img/background3.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    header {
+      background-color: gold;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      opacity: 90%;
+    }
+
+    .logo_kampus {
+      box-shadow: 0 0 5px black;
+      position: absolute;
+      top: 2%;
+      left: 2%;
+      height: 70px;
+      width: 70px;
+      border-radius: 100%;
+      transition-duration: 300ms;
+    }
+
+    .logo_kampus:hover {
+      top: 8%;
+      left: 6%;
+      transform: scale(2);
+      transition-duration: 300ms;
+    }
+
+    .logo_kelompok {
+      height: 30px;
+      box-shadow: 0 0 4px black;
+      border-radius: 100%;
+      filter:invert(100);
+      transition-duration: 300ms;
+    }
+    .logo_kelompok:hover {
+      transform: scale(2);
+      transition-duration: 300ms;
+    }
+
+    h1 {
+      color: white;
+      text-shadow: 0 0 5px black;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      text-shadow: 0 0 5px black;
+      font-weight: bolder;
+      transition-duration: 200ms;
+    }
+
+    nav a:hover {
+      color: white;;
+      font-size: larger;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    .gambar-produk {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .produk {
+      width: 300px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .produk img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid #ccc;
+      transition: transform 0.3s;
+    }
+
+    .produk img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 8px white;
+    }
+
+    h3 {
+      color: white;
+      text-shadow: 0 0 5px black;
+      font-weight: bolder;
+      background-color: rgb(219, 186, 0);
+      border-radius: 5px;
+      box-shadow: 0 0 5px black;
+    }
+
+    .deskripsi-besar {
+      display: none;
+      background-color: rgb(255, 196, 0);
+      padding: 20px;
+      border-radius: 15px;
+      border: 2px solid black;
+      margin-top: 30px;
+      font-size: 16px;
+      color: white;
+      text-shadow: 0 0 3px black;
+    }
+
+    .deskripsi-besar h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+ <header>
+  <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+    <img src="img/logo.png" alt="Logo Kelompok 15" class="logo_kampus">
+    <div>
+      <h1>EXPO TIF-AGB</h1>
+      <h4 style="font-weight: bolder; text-shadow: 0 0 5px black;">KELOMPOK-15 <img src="img/logo_kelompok.png" alt="logo kelompok 15" class="logo_kelompok"></h4>
+    </div>
+  </div>
+  <nav>
+    <a href="index.html" style="color: yellow; text-shadow: 0 0 5px rgb(0, 0, 0); font-size: larger">Home</a>
+    <a href="produk.html">Produk</a>
+    <a href="keranjang.html">Keranjang</a>
+    <a href="checkout.html">Checkout</a>
+  </nav>
+</header>
+
+
+    
+  <main>
+    <h3 style="text-align: center">TEKAN GAMBAR ATAU NAMA PRODUK UNTUK MELIHAT DESKRIPSI PRODUK</h3>
+    <div class="gambar-produk">
+      <div class="produk" data-nama="Rumpu-Rampe" data-komposisi="Bunga pepaya buah dan daun, daun kelor, daun singkong, jantung pisang" data-khasiat="Melancarkan pencernaan, kaya vitamin dan mineral, menjaga kesehatan jantung, meningkatkan imunitas">
+        <img src="img/rumpu-rampe.jpeg" alt="Rumpu-Rampe">
+        <h3>RUMPU-RAMPE</h3>
+      </div>
+      <div class="produk" data-nama="Es-Madu" data-komposisi="Madu, potongan buah jeruk, selasi" data-khasiat="Meningkatkan sistem kekebalan tubuh, melancarkan pencernaan, sumber energi, dan sebagai pemantau kesehatan">
+        <img src="img/Es (3).jpeg" alt="Es-Madu">
+        <h3>ES MADU</h3>
+      </div>
+      <div class="produk" data-nama="Jamu Bubuk" data-komposisi="Kunyit, jahe, temulawak, kayu manis, gula, sereh" data-khasiat="Menghangatkan tubuh, menghambatkan pertumbuhan sel kanker, menurunkan tekanan darah, mencegah obesitas">
+        <img src="img/jamu.jpeg" alt="Jamu Bubuk">
+        <h3>JAMU BUBUK</h3>
+      </div>
+    </div>
+
+    <div class="deskripsi-besar" id="deskripsiBesar">
+      <h2 id="namaProduk"></h2>
+      <p><strong>Komposisi:</strong> <span id="komposisiProduk"></span></p>
+      <p><strong>Khasiat:</strong> <span id="khasiatProduk"></span></p>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const produkList = document.querySelectorAll(".produk");
+      const deskripsiBesar = document.getElementById("deskripsiBesar");
+      const namaProduk = document.getElementById("namaProduk");
+      const komposisiProduk = document.getElementById("komposisiProduk");
+      const khasiatProduk = document.getElementById("khasiatProduk");
+
+      produkList.forEach(function (produk) {
+        produk.addEventListener("click", function () {
+          const nama = produk.getAttribute("data-nama");
+          const komposisi = produk.getAttribute("data-komposisi");
+          const khasiat = produk.getAttribute("data-khasiat");
+
+          namaProduk.textContent = nama;
+          komposisiProduk.textContent = komposisi;
+          khasiatProduk.textContent = khasiat;
+
+          deskripsiBesar.style.display = "block";
+          deskripsiBesar.scrollIntoView({ behavior: "smooth" });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
